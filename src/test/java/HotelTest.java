@@ -74,6 +74,16 @@ public class HotelTest {
     }
 
     @Test
+    public void NoAvailableSpaceInSpecifiedRoom() {
+        hotel.addBedroom(BedroomType.SINGLE);
+        hotel.addBedroom(BedroomType.FAMILY);
+        hotel.checkInGuest(guest, BedroomType.SINGLE);
+        hotel.checkInGuest(guest, BedroomType.SINGLE);
+        assertEquals(1, hotel.getBedrooms().get(0).getGuests().size());
+        assertEquals(0, hotel.getBedrooms().get(1).getGuests().size());
+    }
+
+    @Test
     public void canFindGuestsInRoom() {
         hotel.addBedroom(BedroomType.DOUBLE);
         hotel.checkInGuest(guest, BedroomType.DOUBLE);
@@ -87,6 +97,17 @@ public class HotelTest {
         hotel.checkInGuest(guest, BedroomType.DOUBLE);
         hotel.checkInGuest(guest, BedroomType.DOUBLE);
         assertEquals(hotel.getBedrooms().get(1), hotel.findAllVacantBedrooms().get(0));
+    }
+
+    @Test
+    public void noVacantRoom() {
+        hotel.addBedroom(BedroomType.SINGLE);
+        hotel.addBedroom(BedroomType.DOUBLE);
+        hotel.checkInGuest(guest, BedroomType.DOUBLE);
+        hotel.checkInGuest(guest, BedroomType.DOUBLE);
+        hotel.checkInGuest(guest, BedroomType.DOUBLE);
+        hotel.checkInGuest(guest, BedroomType.SINGLE);
+        assertEquals(0, hotel.findAllVacantBedrooms().size());
     }
 
     @Test
